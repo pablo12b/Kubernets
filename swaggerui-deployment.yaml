@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Windows\system32\kompose.exe convert
+    kompose.version: 1.34.0 (cbf2835db)
+  labels:
+    io.kompose.service: swaggerui
+  name: swaggerui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: swaggerui
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Windows\system32\kompose.exe convert
+        kompose.version: 1.34.0 (cbf2835db)
+      labels:
+        io.kompose.service: swaggerui
+    spec:
+      containers:
+        - env:
+            - name: SWAGGER_JSON
+              value: /api/openapi.yaml
+          image: swaggerapi/swagger-ui
+          name: swaggerui
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /api/openapi.yaml
+              name: swaggerui-cm0
+              subPath: openapi.yaml
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: openapi.yaml
+                path: openapi.yaml
+            name: swaggerui-cm0
+          name: swaggerui-cm0

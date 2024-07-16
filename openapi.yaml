@@ -1,0 +1,159 @@
+openapi: 3.0.3
+info:
+  title: Universidad API
+  description: API para prueba sobre universidad.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: pablobybravo@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/demo63/rest
+tags:
+  - name: universidad
+    description: Todo sobre Universidad
+paths:
+  /universidades:
+    post:
+      tags:
+        - universidades
+      summary: Crear una nueva Universidad
+      description: Crear un nuevo universidad en la base de datos.
+      operationId: crearUniverisdad
+      requestBody:
+        description: Datos del universidad a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Universidad'
+              
+        responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Universidad'
+                
+        '400':
+          description: Error al guardar la universidad
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    put:
+      tags:
+        - universidades
+      summary: Actualizar una universidad existente
+      description: Actualizar los datos de una universidad existente en la base de datos.
+      operationId: actualizarUniversidad
+      requestBody:
+        description: Datos del cliente a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UniversidadPut'
+              
+        responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Universidad'
+                
+        '406':
+          description: Error al actualizar el universidad
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    delete:
+      tags:
+        - universidades
+      summary: Borrar una universidad por DNI
+      description: Borrar una universidad de la base de datos.
+      operationId: borrarUniversidad
+      parameters:
+        - name: codigo
+          in: query
+          description: ID de la universidad
+          required: true
+          schema:
+            type: integer
+            
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: string
+                
+        '500':
+          description: Error al borrar la universidad
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+
+  /universidades/list:
+    get:
+      tags:
+        - universidades
+      summary: Obtener todos las universidades
+      description: Obtener todos los universidades
+      operationId: obtenerTodosLasUniversidades
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Universidad'
+        '404':
+          description: Universidades no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:
+    Universidad:
+      type: object
+      properties:
+        codigo:
+          type: integer
+          example: 1
+          format: int64
+        nombre:
+          type: string
+          example: 'UPS'
+          
+    UniversidadPut:
+      type: object
+      properties:
+        codigo:
+          type: integer
+          example: 1
+          format: int64
+        nombre:
+          type: string
+          example: 'UPS'
+        
+    ErrorMessage:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
