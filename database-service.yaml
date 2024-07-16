@@ -5,12 +5,12 @@ metadata:
     kompose.cmd: C:\Windows\system32\kompose.exe convert
     kompose.version: 1.34.0 (cbf2835db)
   labels:
-    io.kompose.service: postgres
-  name: postgres
+    io.kompose.service: pgadmin
+  name: pgadmin
 spec:
   ports:
-    - name: "5432"
-      port: 5432
-      targetPort: 5432
+    - name: "5050"
+      port: 5050
+      targetPort: 80
   selector:
-    io.kompose.service: postgres
+    io.kompose.service: pgadmin
